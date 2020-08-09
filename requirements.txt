@@ -1,0 +1,12 @@
+flask
+pprint
+requests
+json
+pandas
+matplotlib
+seaborn
+networkx
+re
+os
+time
+math

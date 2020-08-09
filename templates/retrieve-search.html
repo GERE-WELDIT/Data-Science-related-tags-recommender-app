@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tags related to search</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montaga&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+
+  <body>
+    <div class="flex-container">
+      <div class="tags">
+        <ul>
+          <li>
+            <a href="{{url_for('input_query_form')}}">Home </a>
+          </li>
+        </ul>
+
+        <h1>Most Related Tags Recommender</h1>
+        <div class="">
+          <p class="rel-tag">
+            {{related_tags}}
+          </p>
+        </div>
+        <br />
+        <div>
+          <img src="{{ graph_image }}" alt=" weighted-graph image" />
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <div class="footer-container">
+        <footer>
+          <p class="copy-right">© 2020 Gere.</p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
