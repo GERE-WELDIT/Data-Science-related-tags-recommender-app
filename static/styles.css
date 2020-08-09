@@ -79,11 +79,11 @@ input[type="submit"]:hover {
 }
 
 p.rel-tag {
-  font-size: 2.5rem;
-  color: blue;
+  font-size: 3rem;
   width: 65%;
-  text-align: center;
-  font-family: "Montaga", sans-serif;
+  text-align: justify;
+  font-family: "Lucida Sans", "Lucida Sans Unicode", Geneva, Verdana, sans-serif,
+    sans-serif; /*"Montaga" */
   margin-left: auto;
   margin-right: auto;
   border: solid;

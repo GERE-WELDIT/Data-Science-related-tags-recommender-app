@@ -3,7 +3,7 @@ import os
 
 IMAGE_FOLDER = os.path.join("static", "graph_images")
 # import my module that scrapes the stackoverflow data science web-pages
-from stackexg_module import get_user_words, has_multiple__words, related_tags
+from stackexg_module import get_user_words, has_multiple_words, related_tags
 
 
 app = Flask(__name__)  # create instance of flask app
@@ -22,7 +22,7 @@ def retrieve_search():
     if request.method == "POST":
         entered_word = request.form["text"]
         get_user_words(entered_word)
-        key_word = has_multiple__words(entered_word)
+        key_word = has_multiple_words(entered_word)
         full_filename = os.path.join(app.config["UPLOAD_FOLDER"], key_word + ".png")
 
         return render_template(
@@ -31,7 +31,7 @@ def retrieve_search():
             graph_image=full_filename,
         )
     else:
-        return "<p> you have a problem</p>"
+        return "<p> unknown error</p>"
 
 
 if __name__ == "__main__":

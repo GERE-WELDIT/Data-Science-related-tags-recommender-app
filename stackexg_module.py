@@ -1,7 +1,4 @@
-from pprint import pprint
 import requests as req
-
-# import csv
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -33,7 +30,6 @@ def convert_json_data(json_data):
     """convert json to python list format"""
     list_data = []
     dict_data = json.loads(json_data)
-    # pprint(dict_data)
     for item in dict_data["items"]:
         list_data.append([item["tags"]])
     list_data_flatten = [item for item in list_data]
@@ -64,7 +60,7 @@ def get_stackexg_data():
             for row in rows_list_data:
                 tags.append(row)
         else:
-            pprint("to much request,ip address blocked.")
+            print("error due to many requests from this ip address.")
 
     if len(tags) >= number_of_records:
         # initialize an empty dataframe, write the tags into dataframe.
@@ -92,12 +88,6 @@ def load_data(filename):
     tags = [(re.sub(r"[^a-zA-Z -]+", "", tag)).split() for tag in df_tags]
 
     return tags
-
-
-def unique_words(tags):  # tags is 2d list
-    """create a dictionary of unique words"""
-    words = set([word for row in tags for word in row])
-    return words
 
 
 # edges and weights update
@@ -167,7 +157,7 @@ def related_tags(key_word):
     return related_tags
 
 
-def has_multiple__words(text):  # accepts input from users
+def has_multiple_words(text):  # accepts input from users
     """ check if user entered multiple words and convert them into 1 hypenated words"""
     words = (text.lower()).split()
     key_word = ""
@@ -180,7 +170,7 @@ def has_multiple__words(text):  # accepts input from users
 
 
 def get_user_words(text):  # accepts input from users
-    key_word = has_multiple__words(text)
+    key_word = has_multiple_words(text)
     bruteforce_main_graph(key_word)  # bruteforce the graph
 
 
@@ -202,27 +192,18 @@ def bruteforce_main_graph(key_word):
 
     # search for query node in the graph:brute-force search
     if G.has_node(key_word):
-        print("Yes,entered node << {} >> is in the graph.".format(key_word))
         query_edges = list(G.edges(key_word))
-        pprint("the list of edges related to your query:")
-        # pprint(query_edges)
-
         g = draw_query_graph(G, query_edges, key_word)
         weights = nx.get_edge_attributes(g, "weight")
-        pprint("dictionary: sorted weights of edges related to your query:")
-        sorted_weights = sorted(
-            weights.items(), key=lambda x: x[1], reverse=True
-        )  # returns list
-        # result = {item[0]: item[1] for item in sorted_weights}
-        # result = sorted(result.items(), key=lambda x: x[1], reverse=True)
+        sorted_weights = sorted(weights.items(), key=lambda x: x[1], reverse=True)
 
-        top_related_tags = 30
-
+        top_related_tags = 100  # top 50 related tags
         for count, tag in enumerate(sorted_weights):
             u, v = tag[0]
             w = tag[1]
-            tagname = "({} vs. {}:{}),".format(u, v, w)
-            file.write(tagname + "\n")
+            tagname = " [({} , {}): {} times ] , ".format(u, v, w)
+            file.write(tagname)
+            file.write("\n")
             if count == top_related_tags:
                 break
 
