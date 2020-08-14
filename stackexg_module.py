@@ -80,7 +80,7 @@ def load_data(filename):
     """reads the csv file containing tags and returns it into 2d lists of words"""
 
     # get the tags
-    df = pd.read_csv(filename, "r+", delimiter="\n")
+    df = pd.read_csv(filename, "r+", delimiter='"', engine="python")
     # add column name
     # get the tags
     df_tags = df["tags"]
@@ -149,14 +149,6 @@ def draw_query_graph(G, edges, key_word):
     return g
 
 
-def related_tags(key_word):
-    """ returns dictionary of tags related to the search query from a saved file"""
-    filename = "static/graph_related_tags/tags.txt"
-    with open(filename, "r+") as file:
-        related_tags = file.read()
-    return related_tags
-
-
 def has_multiple_words(text):  # accepts input from users
     """ check if user entered multiple words and convert them into 1 hypenated words"""
     words = (text.lower()).split()
@@ -167,11 +159,6 @@ def has_multiple_words(text):  # accepts input from users
         key_word += text
 
     return key_word
-
-
-def get_user_words(text):  # accepts input from users
-    key_word = has_multiple_words(text)
-    bruteforce_main_graph(key_word)  # bruteforce the graph
 
 
 def bruteforce_main_graph(key_word):
@@ -187,8 +174,9 @@ def bruteforce_main_graph(key_word):
     G = draw_graph(edges_list)  # [:500]
 
     # file to store user's search related tags to be displayed in browser
-    filename = "static/graph_related_tags/tags.txt"
-    file = open(filename, "w+")
+    # filename = "static/graph_related_tags/tags.txt"
+    # file = open(filename, "w+")
+    key_word = has_multiple_words(key_word)
 
     # search for query node in the graph:brute-force search
     if G.has_node(key_word):
@@ -198,26 +186,22 @@ def bruteforce_main_graph(key_word):
         sorted_weights = sorted(weights.items(), key=lambda x: x[1], reverse=True)
 
         top_related_tags = 100  # top 50 related tags
+        tags_name = ""
         for count, tag in enumerate(sorted_weights):
             u, v = tag[0]
             w = tag[1]
-            tagname = " [({} , {}): {} times ] , ".format(u, v, w)
-            file.write(tagname)
-            file.write("\n")
+            tags_name += " [({} , {}): {} times ] , ".format(u, v, w)
             if count == top_related_tags:
                 break
 
-        file.close()
-
     else:
-        file.write(
-            "Entered node <{}> does not exist or probably less commmon term.try other words!".format(
-                key_word
-            )
+        tags_name = "Entered node <{}> does not exist or probably less commmon term.try other words!".format(
+            key_word
         )
-        file.close()
+
+    return tags_name
 
 
 # if __name__ == "__main__":
-#     get_user_words()
+#     bruteforce_main_graph()
 
