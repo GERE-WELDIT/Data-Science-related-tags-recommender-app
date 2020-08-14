@@ -6,11 +6,12 @@ import seaborn as sb
 import networkx as nx
 import re
 import os, time, math
-
-
-# %matplotlib inline
+from gensim.models import Word2Vec
 
 sb.set()
+
+# data folder path
+data_filepath = "static/data/tags.csv"
 
 
 def file_update_time():
@@ -26,7 +27,7 @@ def file_update_time():
     return time_difference >= two_days_in_seconds
 
 
-def convert_json_data(json_data):
+def convert_to_json(json_data):
     """convert json to python list format"""
     list_data = []
     dict_data = json.loads(json_data)
@@ -56,7 +57,7 @@ def get_stackexg_data():
         if (
             req_json_data.status_code == 200
         ):  # check request is successful before parsing webpage data
-            rows_list_data = convert_json_data(req_json_data.text)
+            rows_list_data = convert_to_json(req_json_data.text)
             for row in rows_list_data:
                 tags.append(row)
         else:
@@ -87,7 +88,7 @@ def load_data(filename):
     # remove the double-quote via regex
     tags = [(re.sub(r"[^a-zA-Z -]+", "", tag)).split() for tag in df_tags]
 
-    return tags
+    return tags  #  a list of lists
 
 
 # edges and weights update
@@ -162,7 +163,7 @@ def has_multiple_words(text):  # accepts input from users
 
 
 def bruteforce_main_graph(key_word):
-    data_filepath = "static/data/tags.csv"
+
     # read the api codes to get the data from stackexg pages
     get_stackexg_data()  # overwrites into the data file if needs update
     tags = load_data(data_filepath)
@@ -173,35 +174,61 @@ def bruteforce_main_graph(key_word):
 
     G = draw_graph(edges_list)  # [:500]
 
-    # file to store user's search related tags to be displayed in browser
-    # filename = "static/graph_related_tags/tags.txt"
-    # file = open(filename, "w+")
-    key_word = has_multiple_words(key_word)
-
     # search for query node in the graph:brute-force search
+    graph_tags_name = ""
     if G.has_node(key_word):
         query_edges = list(G.edges(key_word))
         g = draw_query_graph(G, query_edges, key_word)
         weights = nx.get_edge_attributes(g, "weight")
         sorted_weights = sorted(weights.items(), key=lambda x: x[1], reverse=True)
 
-        top_related_tags = 100  # top 50 related tags
-        tags_name = ""
+        top_related_tags = 100  # top 100 related tags
         for count, tag in enumerate(sorted_weights):
             u, v = tag[0]
             w = tag[1]
-            tags_name += " [({} , {}): {} times ] , ".format(u, v, w)
+            graph_tags_name += " ({} & {}: {} times) , ".format(u, v, w)
             if count == top_related_tags:
                 break
 
     else:
-        tags_name = "Entered node <{}> does not exist or probably less commmon term.try other words!".format(
+        graph_tags_name += "Entered node <<{}>> does not exist or probably less commmon term.try other words!".format(
             key_word
         )
 
-    return tags_name
+    return graph_tags_name
+
+
+#         **********************Word2Vec tag recommender starts here********************************
+
+
+def train_word2vec_model(data):
+    # creare a model object
+    model = Word2Vec(
+        data, min_count=5, size=512, window=10, iter=40
+    )  # train the model with the data
+    return model
+
+
+def get_word2vec_tags(key_word, top_related_tags=100):
+    """returns the most similar tags recommended based on word2vec model"""
+    tags = load_data(data_filepath)
+    model = train_word2vec_model(tags)  # train the word2vec model
+    word2vec_related_tags = ""
+    try:
+        most_similar_words = model.wv.most_similar(key_word, topn=top_related_tags)
+        for word in most_similar_words:
+            word2vec_related_tags += "({} & {}: {:.2f}%) , ".format(
+                key_word, word[0], word[1] * 100
+            )
+    except:
+        word2vec_related_tags += " word << {} >> is not in word2vec model's training vocabularies.try other words!".format(
+            key_word
+        )
+
+    return word2vec_related_tags
 
 
 # if __name__ == "__main__":
-#     bruteforce_main_graph()
+#     rel_tags = get_word2vec_tags(key_word)
+#     bruteforce_main_graph(key_word)
 

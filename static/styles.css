@@ -80,14 +80,14 @@ input[type="submit"]:hover {
 
 p.rel-tag {
   font-size: 3rem;
-  width: 65%;
+  width: 85%;
   text-align: justify;
   font-family: "Lucida Sans", "Lucida Sans Unicode", Geneva, Verdana, sans-serif,
     sans-serif; /*"Montaga" */
   margin-left: auto;
   margin-right: auto;
   border: solid;
-  border-width: 20px;
+  border-width: 15px;
   border-color: blue;
 }
 
@@ -103,6 +103,19 @@ img {
 
 img:hover {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+p.word2vec-rel-tag {
+  font-size: 3rem;
+  width: 85%;
+  text-align: justify;
+  font-family: "Lucida Sans", "Lucida Sans Unicode", Geneva, Verdana, sans-serif,
+    sans-serif; /*"Montaga" */
+  margin-left: auto;
+  margin-right: auto;
+  border: solid;
+  border-width: 15px;
+  border-color: blue;
 }
 
 footer {

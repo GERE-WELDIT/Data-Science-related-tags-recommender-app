@@ -1,5 +1,5 @@
 {
-      "editor.fontFamily": "Fira Sans,Roboto Mono,Consolas, 'Courier New', monospace",
+      "editor.fontFamily": "Victor Mono Light, Fira Sans,Roboto Mono,Consolas, 'Courier New', monospace",
       "workbench.preferredDarkColorTheme": "Ayu Light Bordered",
       "workbench.preferredHighContrastColorTheme": "Visual Studio Light",
       "workbench.preferredLightColorTheme": "Visual Studio Light"
