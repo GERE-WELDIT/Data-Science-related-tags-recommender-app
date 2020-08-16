@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1" />
-   <title>search related tags</title>
-   <link href="https://fonts.googleapis.com/css2?family=Montaga&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="static/styles.css">
+    <title>related tags recommender</title>
+    <link rel="stylesheet" href="static/form.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montaga&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="flex-container">
+      <div class="form">
+        <h2 class="main">RELATED TAGS RECOMMENDER</h2>
 
-<body>
-   <div class="flex-container">
-      <div class="form-container">
-         <form class="" action="{{ url_for('retrieve_search') }}" class="form-class" method="post">
-            <h1 class='main'>Most Related Tags Recommender</h1>
-            <h2>Enter data-science key word(s)[i.e,'machine
-               learning','python']</h2>
-            <label for="inputquery">Search Query:</label>
-            <br>
-            <input type="text" name="text" value="" minlength="1" maxlength="50">
-            <input type="submit" name="submit" value="submit">
-         </form>
-
-      </div class="">
-      <div class="footer">
-         <footer>
-            <p class="copy-right">© 2020 Gere.</p>
-         </footer>
+        <form
+          class="form-row"
+          action="{{ url_for('retrieve_search') }}"
+          method="post"
+        >
+          <label for="inputquery"> Enter Query:</label>
+          <input
+            type="text"
+            name="text"
+            value=""
+            placeholder=" data science term(s)"
+          />
+          <br />
+          <input type="submit" name="submit" value="submit" />
+        </form>
       </div>
-
-   </div>
-
-</body>
-
-</html>
-
+      <div class="footer">
+        <footer>
+          <p class="copy-right">© 2020 Gere.</p>
+        </footer>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,2 +1,6 @@
 __pycache__/
 env/
+static/styled.css
+templates/form1.html
+static/graph_images/nlp.png
+static/styles.css
